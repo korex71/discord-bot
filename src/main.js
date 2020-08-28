@@ -33,21 +33,26 @@ client.on("message", async message => {
   }
   if(command === "play"){
     execute(message, args, serverQueue)
-    return
   }
   if(command === "skip"){
     skip(message, serverQueue)
-    return
   }
   if(command === "stop"){
-    skip(message, serverQueue)
-    return
+    stop(message, serverQueue)
   }
   if(command === "list"){
-    serverQueue.songs.map((song, index) => {
-      message.channel.send(`[${index}] ${song.title}`)
-    })
-    
+    if(!message.member.voice.channel) return
+    if(!serverQueue.songs) return
+    const embed = new Discord.MessageEmbed()
+    .setColor('#FF69B4')
+    .setTitle('Playlist')
+    .addFields(
+      serverQueue.songs.map((song, index) => {
+        return { name: `[${index+=1}] ${song.title}`, value: song.author }
+      })
+    )
+    .setTimestamp()
+    message.reply(embed)
   }
 })
 
@@ -60,10 +65,11 @@ async function execute(message, args, serverQueue) {
   console.log(args)
   const Info = await getInfo(args)
   const songInfo = Info.items[0]
+  console.log(songInfo)
   const song = {
     thumb: songInfo.thumbnail,
     title: songInfo.fulltitle,
-    author: songInfo.author,
+    author: songInfo.uploader,
     url: songInfo.webpage_url
   }
 
@@ -102,6 +108,7 @@ async function execute(message, args, serverQueue) {
 
 function play(guild, song) {
   const serverQueue = queue.get(guild.id)
+
   if(!song){
     serverQueue.voiceChannel.leave()
     queue.delete(guild.id)
@@ -110,9 +117,9 @@ function play(guild, song) {
   
   const dispatcher = serverQueue.connection
     .play(ytdl(song.url))
-    .on("finish", () => {
+    .on("end", () => {
       serverQueue.songs.shift()
-      play(guild, serverQueue.songs[1])
+      play(guild, serverQueue.songs[0])
     })
     .on("error", error => console.log(error))
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5)
@@ -120,13 +127,11 @@ function play(guild, song) {
 }
 
 function skip(message, serverQueue) {
-  if(!message.member.voice.channel)
-    return message.channel.send(
-      "Você precisa estar em um canal de voz para pular a música."
-    )
-  if(!serverQueue)
-    return message.channel.send("Não há músicas para pular '-'")
+  if(!message.member.voice.channel) return message.reply("Você precisa estar em um canal de voz para pular a música.")
+  if(!serverQueue) return message.channel.send("Não há músicas para pular '-'")
   serverQueue.connection.dispatcher.end()
+  serverQueue.songs.shift()
+  play(message.guild, serverQueue.songs[0])
 }
 
 function stop(message, serverQueue) {
@@ -136,13 +141,6 @@ function stop(message, serverQueue) {
     );
   serverQueue.songs = [];
   serverQueue.connection.dispatcher.end();
-}
-
-function list(message, serverQueue) {
-  if(!message.member.voice.channel)
-    return message.reply(
-      "Você precisa estar em um canal de voz para isso."
-    )
 }
 
 client.login(config.BOT_TOKEN)
