@@ -4,6 +4,7 @@
   "main": "src/main.js",
   "license": "MIT",
   "scripts": {
+    "prestart": "npm install",
     "start": "node ."
   },
   "dependencies": {
