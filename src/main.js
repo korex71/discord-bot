@@ -143,4 +143,4 @@ function stop(message, serverQueue) {
   serverQueue.connection.dispatcher.end();
 }
 
-client.login(config.BOT_TOKEN)
+client.login('NzQ4NTU5OTAwMDEwODcyODky.X0fMuw.NT67buFusoWU27_MysQS2NfwuPo')
