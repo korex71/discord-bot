@@ -6,6 +6,7 @@ const { getInfo } = require('ytdl-getinfo')
 const client = new Discord.Client()
 const token = process.env.BOT_TOKEN || config.BOT_TOKEN
 const prefix = "."
+const streamOptions = { seek: 0, volume: 1};
 
 const queue = new Map()
 
@@ -125,10 +126,10 @@ function play(guild, song) {
     queue.delete(guild.id)
     return
   }
-  console.log('/****/SongURL', song.url)
   const dispatcher = serverQueue.connection
-    .play(song.url2)
+    .play(ytdl(song.url, {filter: 'audioonly'}), streamOptions)
     .on("end", () => {
+      if(serverQueue.songs.length == 0) return dispatcher.voiceChannel.leave()
       serverQueue.songs.shift()
       play(guild, serverQueue.songs[0])
     })
