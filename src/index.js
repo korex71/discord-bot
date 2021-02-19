@@ -121,9 +121,9 @@ function play(guild, song) {
     queue.delete(guild.id)
     return
   }
-  
+  console.log('/****/SongURL', song.url)
   const dispatcher = serverQueue.connection
-    .play(ytdl(song.url))
+    .play(song.url)
     .on("end", () => {
       serverQueue.songs.shift()
       play(guild, serverQueue.songs[0])
