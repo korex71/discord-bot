@@ -4,7 +4,7 @@ const ytsr = require('ytsr')
 const ytdl = require('ytdl-core')
 const { getInfo } = require('ytdl-getinfo')
 const client = new Discord.Client()
-
+const token = process.env.BOT_TOKEN || config.BOT_TOKEN
 const prefix = "."
 
 const queue = new Map()
@@ -76,7 +76,7 @@ async function execute(message, args, serverQueue) {
   if(serverQueue){
     serverQueue.songs.push(song)
     console.log(serverQueue.songs)
-    return message.channel.send(`${song.title} adicionada na JBL do pai 😎`)
+    return message.channel.send(`${song.title} adicionada na playlist 😎`)
   }else{
     const queueContruct = {
       textChannel: message.channel,
@@ -128,7 +128,7 @@ function play(guild, song) {
 
 function skip(message, serverQueue) {
   if(!message.member.voice.channel) return message.reply("Você precisa estar em um canal de voz para pular a música.")
-  if(!serverQueue) return message.channel.send("Não há músicas para pular '-'")
+  if(!serverQueue) return message.channel.send("Não há músicas para pular.")
   serverQueue.connection.dispatcher.end()
   serverQueue.songs.shift()
   play(message.guild, serverQueue.songs[0])
@@ -143,4 +143,4 @@ function stop(message, serverQueue) {
   serverQueue.connection.dispatcher.end();
 }
 
-client.login('NzQ4NTU5OTAwMDEwODcyODky.X0fMuw.NT67buFusoWU27_MysQS2NfwuPo')
+client.login(token)

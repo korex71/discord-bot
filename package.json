@@ -4,8 +4,7 @@
   "main": "src/main.js",
   "license": "MIT",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node ."
+    "start": "node src"
   },
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
