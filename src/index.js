@@ -46,7 +46,7 @@ client.on("message", async message => {
     case 'stop':
       stop(message, serverQueue)
       break;
-    case 'skip':
+    case 'queue':
       if(!message.member.voice.channel || !serverQueue.songs) return
       const embed = new Discord.MessageEmbed()
       .setColor('#FF69B4')
