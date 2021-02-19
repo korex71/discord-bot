@@ -73,12 +73,16 @@ async function execute(message, args, serverQueue) {
   const Info = await getInfo(args)
   const songInfo = Info.items[0]
   console.log(songInfo)
+  const aOnly = ytdl.filterFormats(songInfo.formats, 'audioonly')
   const song = {
     thumb: songInfo.thumbnail,
     title: songInfo.fulltitle,
     author: songInfo.uploader,
-    url: songInfo.webpage_url
+    url: songInfo.webpage_url,
+    url2: aOnly[0].url
   }
+
+  
 
   if(serverQueue){
     serverQueue.songs.push(song)
@@ -123,13 +127,14 @@ function play(guild, song) {
   }
   console.log('/****/SongURL', song.url)
   const dispatcher = serverQueue.connection
-    .play(song.url)
+    .play(song.url2)
     .on("end", () => {
       serverQueue.songs.shift()
       play(guild, serverQueue.songs[0])
     })
     .on("error", error => console.log(error))
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5)
+  //dispatcher.on("speaking", (speaking) => !speaking ? serverQueue.voiceChannel.leave() : '')
   serverQueue.textChannel.send(`Tocando: ${song.title}`)
 }
 
