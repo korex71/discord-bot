@@ -73,13 +73,13 @@ async function execute(message, args, serverQueue) {
   const Info = await getInfo(args)
   const songInfo = Info.items[0]
   console.log(songInfo)
-  const aOnly = ytdl.filterFormats(songInfo.formats, 'audioonly')
+  //const aOnly = ytdl.filterFormats(songInfo.formats, 'audioonly')
   const song = {
     thumb: songInfo.thumbnail,
     title: songInfo.fulltitle,
     author: songInfo.uploader,
     url: songInfo.webpage_url,
-    url2: aOnly[0].url
+    url2: songInfo.formats.url
   }
 
   
