@@ -26,33 +26,40 @@ client.on("message", async message => {
   console.log(args)
 
   const serverQueue = queue.get(message.guild.id)
-
-  if(command === "ping"){
-    const timeTaken = Date.now() - message.createdTimestamp
-    message.reply(`Pong! latência da mensagem: ${timeTaken}ms`)
-  }
-  if(command === "play"){
-    execute(message, args, serverQueue)
-  }
-  if(command === "skip"){
-    skip(message, serverQueue)
-  }
-  if(command === "stop"){
-    stop(message, serverQueue)
-  }
-  if(command === "list"){
-    if(!message.member.voice.channel) return
-    if(!serverQueue.songs) return
-    const embed = new Discord.MessageEmbed()
-    .setColor('#FF69B4')
-    .setTitle('Playlist')
-    .addFields(
-      serverQueue.songs.map((song, index) => {
-        return { name: `[${index+=1}] ${song.title}`, value: song.author }
-      })
-    )
-    .setTimestamp()
-    message.reply(embed)
+  switch (command) {
+    case 'sky':
+      message.reply('A mãe do cara é top')
+      break;
+    case 'yuri':
+      message.reply('https://media.tenor.com/images/6a12a33514fc6846dfd4f3353f77745f/tenor.gif')
+      break;
+    case 'ping':
+      const timeTaken = Date.now() - message.createdTimestamp
+      message.reply(`Pong! latência da mensagem: ${timeTaken}ms`)
+      break;
+    case 'play':
+      execute(message, args, serverQueue)
+      break;
+    case 'skip':
+      skip(message, serverQueue)
+      break;
+    case 'stop':
+      stop(message, serverQueue)
+      break;
+    case 'skip':
+      if(!message.member.voice.channel || !serverQueue.songs) return
+      const embed = new Discord.MessageEmbed()
+      .setColor('#FF69B4')
+      .setTitle('Playlist')
+      .addFields(
+        serverQueue.songs.map((song, index) => {
+          return { name: `[${index+=1}] ${song.title}`, value: song.author }
+        })
+      )
+      .setTimestamp()
+      message.reply(embed)
+    default:
+      break;
   }
 })
 
