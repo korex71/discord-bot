@@ -1,159 +1,79 @@
-const Discord = require('discord.js')
 const config = require('../config.json')
-const ytsr = require('ytsr')
-const ytdl = require('ytdl-core')
-const { getInfo } = require('ytdl-getinfo')
-const client = new Discord.Client()
-const token = process.env.BOT_TOKEN || config.BOT_TOKEN
-const prefix = "."
-const streamOptions = { seek: 0, volume: 1};
+const Discord = require('discord.js'),
+    DisTube = require('distube'),
+    client = new Discord.Client(),
+    config = {
+        prefix: ".",
+        token: process.env.BOT_TOKEN || config.BOT_TOKEN
+    };
 
-const queue = new Map()
+// Create a new DisTube
+const distube = new DisTube(client, { searchSongs: true, emitNewSongOnly: true });
 
-client.on("ready", _ => {
-  console.log('Estou pronto!')
-})
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
 
-client.on("message", async message => {
-  if(message.author.bot) return
-  if(!message.content.startsWith(prefix)) return
+client.on("message", async (message) => {
+    if (message.author.bot) return;
+    if (!message.content.startsWith(config.prefix)) return;
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+    const command = args.shift();
 
-  const commandBody = message.content.slice(prefix.length)
-  const args = commandBody.replace(' ', '+')
-  const rgx = commandBody.split(' ')
-  const command = rgx.shift().toLowerCase()
+    if (command == "play")
+        distube.play(message, args.join(" "));
 
-  // console.log(commandBody, args, command)
-  console.log(args)
+    if (["repeat", "loop"].includes(command))
+        distube.setRepeatMode(message, parseInt(args[0]));
 
-  const serverQueue = queue.get(message.guild.id)
-  switch (command) {
-    case 'sky':
-      message.reply('A mãe do cara é top')
-      break;
-    case 'yuri':
-      message.reply('https://media.tenor.com/images/6a12a33514fc6846dfd4f3353f77745f/tenor.gif')
-      break;
-    case 'ping':
-      const timeTaken = Date.now() - message.createdTimestamp
-      message.reply(`Pong! latência da mensagem: ${timeTaken}ms`)
-      break;
-    case 'play':
-      execute(message, args, serverQueue)
-      break;
-    case 'skip':
-      skip(message, serverQueue)
-      break;
-    case 'stop':
-      stop(message, serverQueue)
-      break;
-    case 'queue':
-      if(!message.member.voice.channel || !serverQueue.songs) return
-      const embed = new Discord.MessageEmbed()
-      .setColor('#FF69B4')
-      .setTitle('Playlist')
-      .addFields(
-        serverQueue.songs.map((song, index) => {
-          return { name: `[${index+=1}] ${song.title}`, value: song.author }
-        })
-      )
-      .setTimestamp()
-      message.reply(embed)
-    default:
-      break;
-  }
-})
+    if (command == "stop") {
+        distube.stop(message);
+        message.channel.send("Stopped the music!");
+    }
 
-async function execute(message, args, serverQueue) {
-  const voiceChannel = message.member.voice.channel
-  if(!voiceChannel)
-    return message.reply(
-      "Você precisa estar conectado em um canal de voz para tocar uma música."
-    )
-  console.log(args)
-  const Info = await getInfo(args)
-  const songInfo = Info.items[0]
-  console.log(songInfo)
-  //const aOnly = ytdl.filterFormats(songInfo.formats, 'audioonly')
-  const song = {
-    thumb: songInfo.thumbnail,
-    title: songInfo.fulltitle,
-    author: songInfo.uploader,
-    url: songInfo.webpage_url,
-    url2: songInfo.formats.url
-  }
+    if (command == "skip")
+        distube.skip(message);
 
-  
+    if (command == "queue") {
+        let queue = distube.getQueue(message);
+        message.channel.send('Current queue:\n' + queue.songs.map((song, id) =>
+            `**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``
+        ).slice(0, 10).join("\n"));
+    }
 
-  if(serverQueue){
-    serverQueue.songs.push(song)
-    console.log(serverQueue.songs)
-    return message.channel.send(`${song.title} adicionada na playlist 😎`)
-  }else{
-    const queueContruct = {
-      textChannel: message.channel,
-      voiceChannel: voiceChannel,
-      connection: null,
-      songs: [],
-      volume: 5,
-      playing: true,
-     };
-     // Setting the queue using our contract
-     queue.set(message.guild.id, queueContruct);
-     // Pushing the song to our songs array
-     queueContruct.songs.push(song);
-     
-     try {
-      // Here we try to join the voicechat and save our connection into our object.
-      var connection = await voiceChannel.join();
-      queueContruct.connection = connection;
-      // Calling the play function to start a song
-      play(message.guild, queueContruct.songs[0]);
-     } catch (err) {
-      // Printing the error message if the bot fails to join the voicechat
-      console.log(err);
-      queue.delete(message.guild.id);
-      return message.channel.send(err);
-     }
-  }
-}
+    if ([`3d`, `bassboost`, `echo`, `karaoke`, `nightcore`, `vaporwave`].includes(command)) {
+        let filter = distube.setFilter(message, command);
+        message.channel.send("Current queue filter: " + (filter || "Off"));
+    }
+});
 
-function play(guild, song) {
-  const serverQueue = queue.get(guild.id)
+// Queue status template
+const status = (queue) => `Volume: \`${queue.volume}%\` | Filter: \`${queue.filter || "Off"}\` | Loop: \`${queue.repeatMode ? queue.repeatMode == 2 ? "All Queue" : "This Song" : "Off"}\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
 
-  if(!song){
-    serverQueue.voiceChannel.leave()
-    queue.delete(guild.id)
-    return
-  }
-  const dispatcher = serverQueue.connection
-    .play(ytdl(song.url, {filter: 'audioonly'}), streamOptions)
-    .on("end", () => {
-      if(serverQueue.songs.length == 0) return dispatcher.voiceChannel.leave()
-      serverQueue.songs.shift()
-      play(guild, serverQueue.songs[0])
+// DisTube event listeners, more in the documentation page
+distube
+    .on("playSong", (message, queue, song) => message.channel.send(
+        `Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}\n${status(queue)}`
+    ))
+    .on("addSong", (message, queue, song) => message.channel.send(
+        `Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`
+    ))
+    .on("playList", (message, queue, playlist, song) => message.channel.send(
+        `Play \`${playlist.name}\` playlist (${playlist.songs.length} songs).\nRequested by: ${song.user}\nNow playing \`${song.name}\` - \`${song.formattedDuration}\`\n${status(queue)}`
+    ))
+    .on("addList", (message, queue, playlist) => message.channel.send(
+        `Added \`${playlist.name}\` playlist (${playlist.songs.length} songs) to queue\n${status(queue)}`
+    ))
+    // DisTubeOptions.searchSongs = true
+    .on("searchResult", (message, result) => {
+        let i = 0;
+        message.channel.send(`**Choose an option from below**\n${result.map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`);
     })
-    .on("error", error => console.log(error))
-  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5)
-  //dispatcher.on("speaking", (speaking) => !speaking ? serverQueue.voiceChannel.leave() : '')
-  serverQueue.textChannel.send(`Tocando: ${song.title}`)
-}
+    // DisTubeOptions.searchSongs = true
+    .on("searchCancel", (message) => message.channel.send(`Searching canceled`))
+    .on("error", (message, e) => {
+        console.error(e)
+        message.channel.send("An error encountered: " + e);
+    });
 
-function skip(message, serverQueue) {
-  if(!message.member.voice.channel) return message.reply("Você precisa estar em um canal de voz para pular a música.")
-  if(!serverQueue) return message.channel.send("Não há músicas para pular.")
-  serverQueue.connection.dispatcher.end()
-  serverQueue.songs.shift()
-  play(message.guild, serverQueue.songs[0])
-}
-
-function stop(message, serverQueue) {
-  if (!message.member.voice.channel)
-    return message.channel.send(
-      "Você precisa estar em um canal de voz para isso."
-    );
-  serverQueue.songs = [];
-  serverQueue.connection.dispatcher.end();
-}
-
-client.login(token)
+client.login(config.token);
