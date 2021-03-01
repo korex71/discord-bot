@@ -27,7 +27,7 @@ client.on("message", async (message) => {
 
     if (command == "stop") {
         distube.stop(message);
-        message.channel.send("Stopped the music!");
+        message.channel.send("Stop the music!");
     }
 
     if (command == "pause") {
@@ -42,6 +42,11 @@ client.on("message", async (message) => {
         message.channel.send('Current queue:\n' + queue.songs.map((song, id) =>
             `**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``
         ).slice(0, 10).join("\n"));
+    }
+
+    if (command == "autoplay") {
+        let mode = distube.toggleAutoplay(message);
+        message.channel.send("Modo autoplay: `" + (mode ? "On" : "Off") + "`");
     }
 
     if ([`3d`, `bassboost`, `echo`, `karaoke`, `nightcore`, `vaporwave`].includes(command)) {
@@ -72,6 +77,7 @@ distube
         let i = 0;
         message.channel.send(`**Escolha uma opção abaixo**\n${result.map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join("\n")}\n*Digite 1-15 para escolher ou cancel para cancelar.*`);
     })
+    .on("finish", message => message.channel.send("Sem mais músicas na playlist."))
     // DisTubeOptions.searchSongs = true
     .on("searchCancel", (message) => message.channel.send(`Pesquisa cancelada.`))
     .on("error", (message, e) => {
