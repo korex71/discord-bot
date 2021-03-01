@@ -30,7 +30,11 @@ client.on("message", async (message) => {
         message.channel.send("Stopped the music!");
     }
 
-    if (command == "skip")
+    if (command == "pause") {
+        distube.pause(message);
+    }
+
+    if (command == "skip" || command == "fs")
         distube.skip(message);
 
     if (command == "queue") {
@@ -42,7 +46,7 @@ client.on("message", async (message) => {
 
     if ([`3d`, `bassboost`, `echo`, `karaoke`, `nightcore`, `vaporwave`].includes(command)) {
         let filter = distube.setFilter(message, command);
-        message.channel.send("Current queue filter: " + (filter || "Off"));
+        message.channel.send("Filtro de playlist atual: " + (filter || "Off"));
     }
 });
 
@@ -52,13 +56,13 @@ const status = (queue) => `Volume: \`${queue.volume}%\` | Filter: \`${queue.filt
 // DisTube event listeners, more in the documentation page
 distube
     .on("playSong", (message, queue, song) => message.channel.send(
-        `Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}\n${status(queue)}`
+        `Tocando \`${song.name}\` - \`${song.formattedDuration}\`\nEscolhida por: ${song.user}\n${status(queue)}`
     ))
     .on("addSong", (message, queue, song) => message.channel.send(
-        `Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`
+        `Adicionada ${song.name} - \`${song.formattedDuration}\` para a playlist por ${song.user}`
     ))
     .on("playList", (message, queue, playlist, song) => message.channel.send(
-        `Play \`${playlist.name}\` playlist (${playlist.songs.length} songs).\nRequested by: ${song.user}\nNow playing \`${song.name}\` - \`${song.formattedDuration}\`\n${status(queue)}`
+        `Tocando da playlist \`${playlist.name}\` (${playlist.songs.length} songs).\nEscolhida por: ${song.user}\nNow playing \`${song.name}\` - \`${song.formattedDuration}\`\n${status(queue)}`
     ))
     .on("addList", (message, queue, playlist) => message.channel.send(
         `Added \`${playlist.name}\` playlist (${playlist.songs.length} songs) to queue\n${status(queue)}`
@@ -66,13 +70,13 @@ distube
     // DisTubeOptions.searchSongs = true
     .on("searchResult", (message, result) => {
         let i = 0;
-        message.channel.send(`**Choose an option from below**\n${result.map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`);
+        message.channel.send(`**Escolha uma opção abaixo**\n${result.map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join("\n")}\n*Digite 1-15 para escolher ou cancel para cancelar.*`);
     })
     // DisTubeOptions.searchSongs = true
-    .on("searchCancel", (message) => message.channel.send(`Searching canceled`))
+    .on("searchCancel", (message) => message.channel.send(`Pesquisa cancelada.`))
     .on("error", (message, e) => {
         console.error(e)
-        message.channel.send("An error encountered: " + e);
+        message.channel.send("Erro encontrado: " + e);
     });
 
 client.login(config.token);
