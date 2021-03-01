@@ -1,10 +1,9 @@
-const config = require('../config.json')
 const Discord = require('discord.js'),
     DisTube = require('distube'),
     client = new Discord.Client(),
     config = {
         prefix: ".",
-        token: process.env.BOT_TOKEN || config.BOT_TOKEN
+        token: process.env.BOT_TOKEN || require('../config.json').BOT_TOKEN
     };
 
 // Create a new DisTube
