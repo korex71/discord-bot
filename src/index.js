@@ -6,7 +6,7 @@ const Discord = require('discord.js'),
         token: process.env.BOT_TOKEN || require('../config.json').BOT_TOKEN
     };
 
-// Create a new DisTube
+// Distube Class
 const distube = new DisTube(client, { searchSongs: true, emitNewSongOnly: true });
 
 client.on('ready', () => {
@@ -55,10 +55,10 @@ client.on("message", async (message) => {
     }
 });
 
-// Queue status template
+// Status template
 const status = (queue) => `Volume: \`${queue.volume}%\` | Filter: \`${queue.filter || "Off"}\` | Loop: \`${queue.repeatMode ? queue.repeatMode == 2 ? "All Queue" : "This Song" : "Off"}\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
 
-// DisTube event listeners, more in the documentation page
+// Event listener
 distube
     .on("playSong", (message, queue, song) => message.channel.send(
         `Tocando \`${song.name}\` - \`${song.formattedDuration}\`\nEscolhida por: ${song.user}\n${status(queue)}`
