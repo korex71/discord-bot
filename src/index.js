@@ -2,10 +2,10 @@ const Discord = require("discord.js"),
   DisTube = require("distube"),
   client = new Discord.Client(),
   config = {
-    prefix: ".",
+    prefix: process.env.BOT_PREFIX || ".",
     token: process.env.BOT_TOKEN || require("../config.json").BOT_TOKEN,
   };
-
+const { api } = require("./api");
 const express = require("express");
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -44,6 +44,15 @@ client.on("message", async (message) => {
   }
 
   if (command == "skip" || command == "fs") distube.skip(message);
+
+  if (["cat", "miau"].includes(command)) {
+    api
+      .get("v1/images/search")
+      .then((res) => {
+        message.channel.send(res.url);
+      })
+      .catch((err) => console.warn(err));
+  }
 
   if (command == "queue") {
     let queue = distube.getQueue(message);
