@@ -49,7 +49,7 @@ client.on("message", async (message) => {
     api
       .get("v1/images/search")
       .then((res) => {
-        message.channel.send(res.url);
+        message.channel.send(res[0].url);
       })
       .catch((err) => console.warn(err));
   }
