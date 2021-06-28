@@ -61,12 +61,12 @@
     streamify "~1.0.0"
     universalify "~2.0.0"
 
-"@distube/ytdl@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@distube/ytdl/-/ytdl-1.0.7.tgz#b9d8ca9bbcbf37c17c40a83c79e1b2912f5c9314"
-  integrity sha512-6tvsnIP7eg3wPL+r5/di0BJdXHcx8v1oMqrFdCe4o5xcpRmCLst77I7vcztRuZXLtcwoPgZ9MXbQWdLhXL1DPQ==
+"@distube/ytdl@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@distube/ytdl/-/ytdl-2.0.6.tgz#b4cf318ac0eaa069190f360c14c0fe5ebf2c01c0"
+  integrity sha512-O8rm4Uh/R+zTZoZj+F2qtFbYGi4peGMs7qHbYKb+9z5gZ2id/MGTXpXlSVVn+49nkff109AflaLSJykI2BRd8A==
   dependencies:
-    prism-media "^1.2.3"
+    prism-media "^1.2.9"
 
 "@distube/ytpl@^1.0.11":
   version "1.0.11"
@@ -75,12 +75,12 @@
   dependencies:
     miniget "^4.1.0"
 
-"@distube/ytsr@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@distube/ytsr/-/ytsr-1.0.8.tgz#bcfefc0001e4590d54b5adc5a1207ac4a912a6f7"
-  integrity sha512-11bUb5PafdVyXBIs1WkQ+SeKMeNVBu29UhXojNW15623yI3SxmfG6VCO0b2UGC0vU2FjCLIyMPpEL9cI+ILUxQ==
+"@distube/ytsr@^1.1.0":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@distube/ytsr/-/ytsr-1.1.2.tgz#50820d09016c2d7a7d5482972dcb1adc2abf92b8"
+  integrity sha512-MPhXdKeI474fXGgbsrUL9tSv39I7kh6gNOfs9Kine4aeEv1zjg6gVaXwbju3NeplwkSBT62TvILB8X42Zd2CLw==
   dependencies:
-    miniget "^4.1.0"
+    miniget "^4.2.1"
 
 "@sindresorhus/is@^4.0.0":
   version "4.0.0"
@@ -325,30 +325,30 @@ detect-libc@^1.0.3:
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
   integrity sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=
 
-discord.js@^12.3.1:
-  version "12.5.1"
-  resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-12.5.1.tgz#992b45753e3815526a279914ccc281d3496f5990"
-  integrity sha512-VwZkVaUAIOB9mKdca0I5MefPMTQJTNg0qdgi1huF3iwsFwJ0L5s/Y69AQe+iPmjuV6j9rtKoG0Ta0n9vgEIL6w==
+discord.js@^12.5.3:
+  version "12.5.3"
+  resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-12.5.3.tgz#56820d473c24320871df9ea0bbc6b462f21cf85c"
+  integrity sha512-D3nkOa/pCkNyn6jLZnAiJApw2N9XrIsXUAdThf01i7yrEuqUmDGc7/CexVWwEcgbQR97XQ+mcnqJpmJ/92B4Aw==
   dependencies:
     "@discordjs/collection" "^0.1.6"
     "@discordjs/form-data" "^3.0.1"
     abort-controller "^3.0.0"
     node-fetch "^2.6.1"
-    prism-media "^1.2.2"
+    prism-media "^1.2.9"
     setimmediate "^1.0.5"
     tweetnacl "^1.0.3"
-    ws "^7.3.1"
+    ws "^7.4.4"
 
-distube@^2.8.10:
-  version "2.8.10"
-  resolved "https://registry.yarnpkg.com/distube/-/distube-2.8.10.tgz#03c9d2f50d99a604d2c294e25e0da9d8ea9e4fca"
-  integrity sha512-lFHJ2hTAbYcAkZ0V4CA3BwLlV3hTAEF++Fu24BI+4HTVfAB9wMSsXt1tfIT3tCswk8F7RKiBzRR1OOO+h5lylQ==
+distube@^2.8.15:
+  version "2.8.15"
+  resolved "https://registry.yarnpkg.com/distube/-/distube-2.8.15.tgz#fddbf89ac4e381f7412fac27af5d096091c5c6fd"
+  integrity sha512-g8uL2IrVX0CJxguhiEn0ARpSMZfKnrC4Z1Nw8bQSMVN6P8k1kJqR7gtme3SvxuRcf6ygBQUQDD2/sjRQiuBToQ==
   dependencies:
     "@distube/youtube-dl" "^1.0.4"
-    "@distube/ytdl" "^1.0.7"
+    "@distube/ytdl" "^2.0.6"
     "@distube/ytpl" "^1.0.11"
-    "@distube/ytsr" "^1.0.8"
-    ytdl-core "^4.5.0"
+    "@distube/ytsr" "^1.1.0"
+    ytdl-core "^4.8.2"
 
 end-of-stream@^1.1.0:
   version "1.4.4"
@@ -625,6 +625,11 @@ miniget@^4.0.0, miniget@^4.1.0:
   resolved "https://registry.yarnpkg.com/miniget/-/miniget-4.2.0.tgz#0004e95536b192d95a7d09f4435d67b9285481d0"
   integrity sha512-IzTOaNgBw/qEpzkPTE7X2cUVXQfSKbG8w52Emi93zb+Zya2ZFrbmavpixzebuDJD9Ku4ecbaFlC7Y1cEESzQtQ==
 
+miniget@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/miniget/-/miniget-4.2.1.tgz#11a1c24817a059e292378eb9cff4328d9240c665"
+  integrity sha512-O/DduzDR6f+oDtVype9S/Qu5hhnx73EDYGyZKwU/qN82lehFZdfhoa4DT51SpsO+8epYrB3gcRmws56ROfTIoQ==
+
 minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -766,10 +771,10 @@ path-key@^3.0.0, path-key@^3.1.0:
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-3.1.1.tgz#581f6ade658cbba65a0d3380de7753295054f375"
   integrity sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==
 
-prism-media@^1.2.2, prism-media@^1.2.3:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.2.7.tgz#697c9630e2a473a5dfab19c71eba398a083c2bf0"
-  integrity sha512-thS1z3L6BDmf724sqLC73bHGjSYArFTYHa7cqInyS3EdDNTHKgDCXy7l+IhRvlnX7aFNiUb8jJcC+R8ezxwgMA==
+prism-media@^1.2.9:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.3.1.tgz#418acd2b122bedea2e834056d678f9a5ad2943ae"
+  integrity sha512-nyYAa3KB4qteJIqdguKmwxTJgy55xxUtkJ3uRnOvO5jO+frci+9zpRXw6QZVcfDeva3S654fU9+26P2OSTzjHw==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -989,20 +994,20 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
-ws@^7.3.1:
-  version "7.4.3"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.3.tgz#1f9643de34a543b8edb124bdcbc457ae55a6e5cd"
-  integrity sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==
+ws@^7.4.4:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
+  integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
 
 yallist@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
   integrity sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
 
-ytdl-core@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.5.0.tgz#f07733387c548e5c3a5614c93ef55bde666eeaf4"
-  integrity sha512-e8r6skrakWNixsVlNPBMoRM1HrdW1swE97If9nenDUjF65uogYk4DvxIuqlmqRfBWKe+6aIZwqedNxUU9XLYJA==
+ytdl-core@^4.8.2:
+  version "4.8.3"
+  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.8.3.tgz#21570d1834db13dec7828cf87bbf4c83c0fe68d7"
+  integrity sha512-cWCBeX4FCgjcKmuVK384MT582RIAakpUSeMF/NPVmhO8cWiG+LeQLnBordvLolb0iXYzfUvalgmycYAE5Sy6Xw==
   dependencies:
     m3u8stream "^0.8.3"
     miniget "^4.0.0"
