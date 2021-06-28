@@ -1,7 +1,9 @@
-const axios = require("axios");
+const axios = require("axios").default;
 
-exports.api = axios.create({
+const api = axios.create({
   baseURL: "https://api.thecatapi.com/",
 });
 
 api.default.headers.common["x-api-key"] = process.env.CAT_API_KEY;
+
+module.exports = api;

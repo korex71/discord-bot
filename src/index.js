@@ -5,7 +5,7 @@ const Discord = require("discord.js"),
     prefix: process.env.BOT_PREFIX || ".",
     token: process.env.BOT_TOKEN || require("../config.json").BOT_TOKEN,
   };
-const { api } = require("./api");
+const api = require("./api");
 const express = require("express");
 const PORT = process.env.PORT || 3000;
 const app = express();
