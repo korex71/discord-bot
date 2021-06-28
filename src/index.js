@@ -48,8 +48,9 @@ client.on("message", async (message) => {
   if (["cat", "miau"].includes(command)) {
     api
       .get("v1/images/search")
-      .then((res) => {
-        message.channel.send(res[0].url);
+      .then((res) => res.data)
+      .then((data) => {
+        message.channel.send(data[0].url);
       })
       .catch((err) => console.warn(err));
   }
