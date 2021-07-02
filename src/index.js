@@ -7,6 +7,7 @@ const Discord = require("discord.js"),
   };
 const api = require("./api");
 const express = require("express");
+const { default: axios } = require("axios");
 const PORT = process.env.PORT || 3000;
 const app = express();
 
@@ -37,6 +38,37 @@ client.on("message", async (message) => {
   if (command == "stop") {
     distube.stop(message);
     message.channel.send("Stop the music!");
+  }
+
+  if (command == "help") {
+    message.channel.send(`
+      ${config.prefix}play\n
+      ${config.prefix}pause\n
+      ${config.prefix}dog\n
+      ${config.prefix}cat\n
+      ${config.prefix}stop\n
+      ${config.prefix}repeat / loop\n
+      ${config.prefix}queue\n
+      ${config.prefix}skip / fs\n
+      ${config.prefix}autoplay\n\n
+      ${config.prefix}3d\n
+      ${config.prefix}vaporwave\n
+      ${config.prefix}echo\n
+      ${config.prefix}bassboost\n
+      ${config.prefix}nightcore\n
+      ${config.prefix}karaoke\n
+    `);
+  }
+
+  if (command == "dog") {
+    axios
+      .get("https://random.dog/woof.json")
+      .then((res) => res.data)
+      .then((data) => {
+        message.channel.send(data.url);
+      })
+      .catch((err) => console.warn(err));
+    message.channel.send();
   }
 
   if (command == "pause") {
