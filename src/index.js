@@ -11,7 +11,17 @@ const { default: axios } = require("axios");
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use(express.static(__dirname + "/public"));
+var bot_nickname = "";
+
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+  res.render("index", {
+    prefix: config.prefix,
+    bot: bot_nickname,
+  });
+});
+
 app.listen(PORT, () => console.log(PORT));
 
 // Distube Class
@@ -22,6 +32,7 @@ const distube = new DisTube(client, {
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  bot_nickname = client.user.tag;
 });
 
 client.on("message", async (message) => {
